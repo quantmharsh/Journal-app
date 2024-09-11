@@ -17,10 +17,10 @@ import java.util.*;
 //RestController are the components that handle our HTTP request
 @RestController
 // requestmappingis used to create  end point
-@RequestMapping("/journal")
+@RequestMapping("/_journal")
 public class  JournalEntryController{
 
-    private Map<Long,JournalEntry> journalEntries= new HashMap<>();
+    private Map<String,JournalEntry> journalEntries= new HashMap<>();
 
 
     //localhost:8080/journal/get-journals
@@ -45,13 +45,13 @@ public  JournalEntry getJournalEntry(@PathVariable  Long myId)
 
     }
     @DeleteMapping("/id/{myId}")
-    public  JournalEntry deleteJournalEntryById(@PathVariable Long myId)
+    public  JournalEntry deleteJournalEntryById(@PathVariable String myId)
     {
         return journalEntries.remove(myId);
     }
 
     @PutMapping("/update/{myId}")
-    public JournalEntry updateJournalById(@PathVariable Long myId  , @RequestBody JournalEntry myEntry )
+    public JournalEntry updateJournalById(@PathVariable String myId  , @RequestBody JournalEntry myEntry )
     {
         return journalEntries.put(myId, myEntry);
     }
@@ -59,3 +59,4 @@ public  JournalEntry getJournalEntry(@PathVariable  Long myId)
 
 
 }
+    
