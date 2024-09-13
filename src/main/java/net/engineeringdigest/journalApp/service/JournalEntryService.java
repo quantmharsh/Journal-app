@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
@@ -26,15 +27,27 @@ public class JournalEntryService {
     private UserService userService;
     //creating a method to save  journalentry in db
     //getting .save method from mongodb with help of journalentryrepository
+
+    //Transactional wraps this method for each request into container and updates data when every statement executes coreectly 
+    //if any lines fail it rollback all the changes that it had made
+     @Transactional
     public  void saveEntry(JournalEntry journalEntry , String userName){
-        // 1. find the user
-        User user= userService.findByuserName(userName);
-        //s 2. save the journalEntry in journalentries collection
-       JournalEntry saved=  journalEntryRepository.save(journalEntry);
-       // 3. now add that saved journalentry in user's journalentries list 
-       user.getJournalEntries().add(saved);
-       // 4. at last save the user in user collectionss
-       userService.saveEntry(user);
+       try {
+         // 1. find the user
+         User user= userService.findByuserName(userName);
+         //s 2. save the journalEntry in journalentries collection
+        JournalEntry saved=  journalEntryRepository.save(journalEntry);
+        // 3. now add that saved journalentry in user's journalentries list 
+        user.getJournalEntries().add(saved);
+        //if this line execurtes then journal will be saved in journalEntries but not in user
+        //so to overcome this issue we use Transactional annotation
+     //  user.setUserName(null);
+        // 4. at last save the user in user collectionss
+        userService.saveEntry(user);
+       } catch (Exception e) {
+        // TODO: handle exception
+        throw new RuntimeException("An error occured while saving journal entry");
+       }
     }
     public  void saveEntry(JournalEntry journalEntry ){
        
