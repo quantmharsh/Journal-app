@@ -17,5 +17,6 @@ import net.engineeringdigest.journalApp.entity.User;
 @Component
 public interface UserRepository extends  MongoRepository<User  , ObjectId> {
     User findByuserName(String userName);
+    void deleteByUserName(String userName);
     
 }

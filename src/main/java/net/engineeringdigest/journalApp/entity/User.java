@@ -28,4 +28,5 @@ public class User {
     //using Dbref to store list of journal entries OF  user in mongodb which is stored ion separate collection journalentries
     @DBRef
     private List<JournalEntry>  journalEntries= new ArrayList<>();
+    private List<String> roles;
 }

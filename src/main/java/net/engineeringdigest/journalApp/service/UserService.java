@@ -1,10 +1,13 @@
 package net.engineeringdigest.journalApp.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import net.engineeringdigest.journalApp.entity.JournalEntry;
@@ -25,7 +28,12 @@ public class  UserService {
     private UserRepository  userRepository;
     //creating a method to save  journalentry in db
     //getting .save method from mongodb with help of journalentryrepository
+
+    public static final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
     public  void saveEntry( User  user){
+        //incrypt the password and then store it in database 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
     }
     public List<User> getall(){
