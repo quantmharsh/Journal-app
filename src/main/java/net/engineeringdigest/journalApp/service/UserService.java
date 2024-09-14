@@ -36,6 +36,16 @@ public class  UserService {
         user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
     }
+    public  void saveAdmin( User  user){
+        //incrypt the password and then store it in database 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER" , "ADMIN"));
+        userRepository.save(user);
+    }
+    public void saveExistingUser(User user)
+    { 
+        userRepository.save(user);
+    }
     public List<User> getall(){
         return userRepository.findAll();
     }

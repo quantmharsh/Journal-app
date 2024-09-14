@@ -25,7 +25,7 @@ public class PublicController {
     //we have brought  create user method from userrcontroller to here
     //because we want this route to be public and all other usser related route to be authenticated 
     
-    @PostMapping
+    @PostMapping("/create-user")
     public void createUser(@RequestBody User user) {
         userService.saveEntry(user);
     }

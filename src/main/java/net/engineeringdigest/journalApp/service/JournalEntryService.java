@@ -3,6 +3,8 @@ package net.engineeringdigest.journalApp.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +45,7 @@ public class JournalEntryService {
         //so to overcome this issue we use Transactional annotation
      //  user.setUserName(null);
         // 4. at last save the user in user collectionss
-        userService.saveEntry(user);
+        userService.saveExistingUser(user);
        } catch (Exception e) {
         // TODO: handle exception
         throw new RuntimeException("An error occured while saving journal entry");
@@ -62,12 +64,24 @@ public class JournalEntryService {
     {
         return  journalEntryRepository.findById(id);
     }
-    public void deleteById(ObjectId id  , String userName)
+    @Transactional
+    public boolean deleteById(ObjectId id  , String userName)
     {
-         //find the user
-         User user=userService.findByuserName(userName);
-         user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-         userService.saveEntry(user);
-         journalEntryRepository.deleteById(id);
+        boolean removed=false;
+      try {
+           //find the user
+           User user=userService.findByuserName(userName);
+          removed=  user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+          if(removed)
+          {
+              userService.saveExistingUser(user); 
+              journalEntryRepository.deleteById(id);
+          }
+          return removed;
+      } catch (Exception e) {
+        // TODO: handle exception
+        throw new RuntimeException("an error occured while deleting journal entry",e);
+      }
+      
     }
 }

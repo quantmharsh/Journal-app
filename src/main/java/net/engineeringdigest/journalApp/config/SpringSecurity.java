@@ -29,16 +29,31 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     // @Autowired
     // private JwtFilter jwtFilter;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/journal/**" , "/user/**").authenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll();
+    // @Override
+    // protected void configure(HttpSecurity http) throws Exception {
+    //     http.authorizeRequests()
+    //             .antMatchers("/journal/**" , "/user/**").authenticated()
+    //             .antMatchers("/admin/**").hasRole("ADMIN")
+    //             .anyRequest().permitAll();
                 
-                        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
-        // http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+    //                     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
+    //     // http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    // }
+
+    //used this configuration to enable basic authentication NOT FOR JWT
+    //it was used for testing purpose when it was working with basic auth passing in header
+    @Override
+protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .antMatchers("/journal/**", "/user/**").authenticated()
+        .antMatchers("/admin/**").hasRole("ADMIN")
+        .anyRequest().permitAll()
+        .and()
+        .httpBasic()  // Enable Basic Authentication
+        .and()
+        .csrf().disable();
+}
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
