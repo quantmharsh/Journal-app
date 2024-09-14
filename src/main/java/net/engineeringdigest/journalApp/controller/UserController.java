@@ -60,7 +60,7 @@ public class UserController {
     {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         userRepository.deleteByUserName(authentication.getName());
-        return nre ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         
     }
 }
