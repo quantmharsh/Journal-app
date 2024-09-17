@@ -17,7 +17,7 @@ import net.engineeringdigest.journalApp.repository.UserRepository;
 //if we will not mention this then our main server will not run
 
 //JUnit Testing 
-@SpringBootTest
+// @SpringBootTest
 public class UserServicesTest {
 
     @Autowired

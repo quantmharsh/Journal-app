@@ -14,10 +14,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.engineeringdigest.journalApp.api.response.WeatherResponse;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import net.engineeringdigest.journalApp.service.UserService;
+import net.engineeringdigest.journalApp.service.WeatherService;
+
 import java.util.*;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 //RestController are the components that handle our HTTP request
 @RestController
@@ -29,7 +35,8 @@ public class UserController {
     private UserService userService;
         @Autowired
     private UserRepository  userRepository;
-
+@Autowired
+private WeatherService weatherService;
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getall();
@@ -63,4 +70,17 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         
     }
+    @GetMapping("/greetings")
+  public ResponseEntity<?> greeting(){
+    Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+     WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
+     String greeting="";
+     if(weatherResponse!=null)
+     {
+        greeting="Weather feels like"+weatherResponse.getCurrent().getFeelslike();
+     }
+    return new ResponseEntity<>( "  Hello " + authentication.getName()+greeting  ,  HttpStatus.OK);
+
+  }
+    
 }

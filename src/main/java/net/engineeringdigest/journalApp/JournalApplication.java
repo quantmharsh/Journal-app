@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 //EnableTransactioNmanagement is used to check methods which have transaction annotation  on it and wrap that method in 
 //1 container which either updates everywhere or rollback 
@@ -23,6 +24,10 @@ public class JournalApplication {
     @Bean
     public PlatformTransactionManager add(MongoDatabaseFactory dbFactory) {
         return new  MongoTransactionManager(dbFactory);
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new   RestTemplate();
     }
 
 
