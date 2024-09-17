@@ -11,6 +11,8 @@ import net.engineeringdigest.journalApp.api.response.WeatherResponse;
 
 @Component
 public class WeatherService {
+    //Value annotation is used to get value from properties file similarly like  .env file and its 
+    //not pushed on github
     @Value("${weather.api.key}")
     private  String apiKey ;  
     private static final  String  API="http://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
