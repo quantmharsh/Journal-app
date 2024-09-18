@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import net.engineeringdigest.journalApp.api.response.WeatherResponse;
+import net.engineeringdigest.journalApp.cache.AppCache;
 
 @Component
 public class WeatherService {
@@ -19,9 +20,11 @@ public class WeatherService {
 
     @Autowired
     private RestTemplate restTemplate ;
+    @Autowired
+    private AppCache appCache;
     public  WeatherResponse getWeather(String city)
     {
-        String finalAPI =API.replace("CITY" , city).replace("API_KEY" , apiKey);
+        String finalAPI =appCache.APP_CACHE.get("weather_api").replace("<city>" , city).replace("<apiKey>" , apiKey);
            
         //restTemplate is used to send http request to api for us and get response
         //Converting jSON reponse to POJO by usin weatherService Class
